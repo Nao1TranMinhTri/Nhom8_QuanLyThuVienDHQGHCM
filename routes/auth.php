@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\AuthController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 // khi người dùng bấm nút quay lại khi đổi mật khẩu
@@ -28,5 +27,10 @@ Route::middleware(['redirect.if.auth'])->group(function () {
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::middleware(['check.login'])->group(function () {
-  Route::get('/dashboard', [AuthController::class, 'test'])->name('dashboard');
+  Route::middleware(['role:admin'])->group(function () {
+    Route::get('/admin', [AuthController::class, 'admin'])->name('admin');
+  });
+  Route::middleware(['role:member'])->group(function () {
+    Route::get('/member', [AuthController::class, 'member'])->name('member');
+  });
 });

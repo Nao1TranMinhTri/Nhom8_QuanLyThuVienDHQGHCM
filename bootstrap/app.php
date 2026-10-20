@@ -20,6 +20,11 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
     })
     ->withMiddleware(function (Middleware $middleware) {
+        $middleware->alias([
+            'role' => \App\Http\Middleware\CheckRole::class,
+        ]);
+    })
+    ->withMiddleware(function (Middleware $middleware) {
         // dùng để xóa các session đổi mật khẩu khi họ đổi sang trang khác
         // dùng cho trường hợp nếu người dùng đang ở form đổi mật khẩu
         // mà đổi url thì session vẫn còn lưu

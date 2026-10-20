@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Mail\SendOTPMail;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
@@ -53,11 +54,6 @@ class AuthController extends Controller
         return view('auth.reset-password');
     }
 
-    public function test(Request $request)
-    {
-        return view('auth.test');
-    }
-
     public function login(Request $request)
     {
         // validate
@@ -94,9 +90,17 @@ class AuthController extends Controller
             ])->onlyInput('student_code');
         }
 
-        session(['user_id' => $user->user_id]);
+        session(['user_id' => $user->user_id, 'role' => $user->role]);
         $request->session()->regenerate();
-        return redirect()->route('dashboard')->with('success', 'Đăng nhập thành công');
+
+        switch ($user->role) {
+            case 'admin':
+                return redirect()->route('admin')->with('success', 'Chào mừng Quản Trị Viên!');
+            case 'member':
+                return redirect()->route('member')->with('success', 'Đăng nhập thành công');
+            default:
+                return abort(404);
+        }
     }
 
     public function forgotPassword(Request $request)
@@ -205,9 +209,20 @@ class AuthController extends Controller
 
     public function logout(Request $request)
     {
-        $request->session()->forget('user_id');
+        $request->session()->invalidate(); // xóa toàn bộ session
         $request->session()->regenerateToken();
 
-        return redirect('/login')->with('success', 'Đăng xuất thành công!');
+        return redirect()->route('showLoginForm')->with('success', 'Đăng xuất thành công!');
+    }
+
+
+
+    public function admin(Request $request)
+    {
+        return view('auth.admin');
+    }
+    public function member(Request $request)
+    {
+        return view('auth.member');
     }
 }

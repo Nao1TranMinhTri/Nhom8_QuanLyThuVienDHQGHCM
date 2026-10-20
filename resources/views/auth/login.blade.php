@@ -77,6 +77,11 @@
                     class="w-full py-3 px-4 bg-teal-600 hover:bg-teal-700 text-white font-semibold rounded-xl shadow-lg shadow-teal-600/25 transition duration-200 cursor-pointer">
                     ĐĂNG NHẬP
                 </button>
+                <button type="submit"
+                    onclick="document.querySelector('input[name=\'student_code\']').value = '1500012345678'; document.querySelector('input[name=\'password\']').value = '12345678A'; this.form.submit();"
+                    class="w-full py-3 px-4 bg-teal-600 hover:bg-teal-700 text-white font-semibold rounded-xl shadow-lg shadow-teal-600/25 transition duration-200 cursor-pointer">
+                    ĐĂNG NHẬP NHANH
+                </button>
             </form>
         </div>
 
